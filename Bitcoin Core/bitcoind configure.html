@@ -1,0 +1,1018 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>bitcoind のconfigure</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="9948162e-5a70-47a5-af94-575b4566eb78" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📎</span></div><h1 class="page-title">bitcoind のconfigure</h1><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th>tag</th><td><span class="selected-value">docs</span></td></tr><tr class="property-row property-row-relation"><th>トップページ</th><td><a href="Untitled.html">目次</a></td></tr></tbody></table></header><div class="page-body"><h2 id="6f37684c-289b-4431-99a0-4a31a73ee72b" class="">主な項目</h2><ul id="fff43cbb-c89a-4f90-af40-1e42875e6206" class="bulleted-list"><li>alertnotify<p id="bb747f7e-0a81-4f45-86a6-3fe9c702d182" class="">ノードのクリティカルなエラーが起こった際に実行するコマンドを指定する（メール送信など）</p></li></ul><ul id="a54fbf78-fd65-4eaf-91e4-230adedd2b8d" class="bulleted-list"><li>conf
+confファイルを利用する際にそのパスを指定する。デフォルトは<code>$HOME/.bitcoin/bitcoin.conf</code></li></ul><ul id="d0bad338-2313-452b-bb81-37b42ce02d22" class="bulleted-list"><li>datadir
+ブロックチェーンデータを保存するディレクトリを変更する。デフォルトは <code>$HOME/.bitcoin</code></li></ul><ul id="3ae4d35c-d356-4ee1-897b-2c624ba8c3f9" class="bulleted-list"><li>prune
+古いブロックを削除して、データを数メガバイトに減らします。データリソースに制約がある場合に利用します。</li></ul><ul id="b7629a8b-2f6b-411f-bbe2-f9af915070fb" class="bulleted-list"><li>txindex<p id="d589d548-7394-4355-9655-ad63db7ed00e" class="">全てのトランザクションのtxIDを保持します。チェーン中の全トランザクションをIDで走査したい場合に利用します。</p></li></ul><ul id="7b3d7623-cc1f-466c-b9db-d7689dd8526d" class="bulleted-list"><li>dbcache
+UTXOを保存するのに利用するキャッシュサイズを設定します。デフォルトは300MBです。ハードのスペックに応じて変更できます</li></ul><ul id="d1b5cb86-b3f5-44af-ae9c-0cf2b5cd552b" class="bulleted-list"><li>maxconnections<p id="5568e8fe-15e1-4ea1-a6e3-b685574d310e" class="">接続するノードの最大数を設定します。ノードを利用する環境の通信量に制限がある場合はデフォルト設定から数を下げることで通信量を減らせます。</p></li></ul><ul id="75ed9b02-e88f-4532-b24b-e392858171b4" class="bulleted-list"><li>maxmempool
+トランザクションを保存するメモリ領域を設定します。メモリが少ないマシンを利用する場合に設定します。</li></ul><ul id="95ebf557-6a1d-448a-a7f2-3eef95b22b04" class="bulleted-list"><li>maxreceivebuffer/maxsendbuffer
+接続ごとのメモリバッファを1000バイト単位で制限します。こちらも、メモリが少ないマシンを利用する場合に設定します。</li></ul><ul id="0ceac63d-7559-49a7-a1c2-fb5d9b8acf9c" class="bulleted-list"><li>minrelaytxfee
+中継する取引の手数料の最低値を設定します。</li></ul><h2 id="fb83e463-45e4-43c3-ae24-e243f02ab128" class="">全項目</h2><pre id="1df1ad39-f20a-401b-857b-67c3d7cd054f" class="code"><code>Bitcoin Core Daemon version v0.17.1
+
+Usage:  bitcoind [options]                     Start Bitcoin Core Daemon
+
+Options:
+
+  -?
+       Print this help message and exit
+
+  -alertnotify=&lt;cmd&gt;
+       Execute command when a relevant alert is received or we see a really
+       long fork (%s in cmd is replaced by message)
+
+  -assumevalid=&lt;hex&gt;
+       If this block is in the chain assume that it and its ancestors are valid
+       and potentially skip their script verification (0 to verify all,
+       default:
+       0000000000000000002e63058c023a9a1de233554f28c7b21380b6c9003f36a8,
+       testnet:
+       0000000000000037a8cd3e06cd5edbfe9dd1dbcc5dacab279376ef7cfc2b4c75)
+
+  -blocknotify=&lt;cmd&gt;
+       Execute command when the best block changes (%s in cmd is replaced by
+       block hash)
+
+  -blockreconstructionextratxn=&lt;n&gt;
+       Extra transactions to keep in memory for compact block reconstructions
+       (default: 100)
+
+  -blocksdir=&lt;dir&gt;
+       Specify blocks directory (default: &lt;datadir&gt;/blocks)
+
+  -conf=&lt;file&gt;
+       Specify configuration file. Relative paths will be prefixed by datadir
+       location. (default: bitcoin.conf)
+
+  -daemon
+       Run in the background as a daemon and accept commands
+
+  -datadir=&lt;dir&gt;
+       Specify data directory
+
+  -dbcache=&lt;n&gt;
+       Set database cache size in megabytes (4 to 16384, default: 450)
+
+  -debuglogfile=&lt;file&gt;
+       Specify location of debug log file. Relative paths will be prefixed by a
+       net-specific datadir location. (-nodebuglogfile to disable;
+       default: debug.log)
+
+  -includeconf=&lt;file&gt;
+       Specify additional configuration file, relative to the -datadir path
+       (only useable from configuration file, not command line)
+
+  -loadblock=&lt;file&gt;
+       Imports blocks from external blk000??.dat file on startup
+
+  -maxmempool=&lt;n&gt;
+       Keep the transaction memory pool below &lt;n&gt; megabytes (default: 300)
+
+  -maxorphantx=&lt;n&gt;
+       Keep at most &lt;n&gt; unconnectable transactions in memory (default: 100)
+
+  -mempoolexpiry=&lt;n&gt;
+       Do not keep transactions in the mempool longer than &lt;n&gt; hours (default:
+       336)
+
+  -par=&lt;n&gt;
+       Set the number of script verification threads (-1 to 16, 0 = auto, &lt;0 =
+       leave that many cores free, default: 0)
+
+  -persistmempool
+       Whether to save the mempool on shutdown and load on restart (default: 1)
+
+  -pid=&lt;file&gt;
+       Specify pid file. Relative paths will be prefixed by a net-specific
+       datadir location. (default: bitcoind.pid)
+
+  -prune=&lt;n&gt;
+       Reduce storage requirements by enabling pruning (deleting) of old
+       blocks. This allows the pruneblockchain RPC to be called to
+       delete specific blocks, and enables automatic pruning of old
+       blocks if a target size in MiB is provided. This mode is
+       incompatible with -txindex and -rescan. Warning: Reverting this
+       setting requires re-downloading the entire blockchain. (default:
+       0 = disable pruning blocks, 1 = allow manual pruning via RPC,
+       &gt;=550 = automatically prune block files to stay under the
+       specified target size in MiB)
+
+  -reindex
+       Rebuild chain state and block index from the blk*.dat files on disk
+
+  -reindex-chainstate
+       Rebuild chain state from the currently indexed blocks
+
+  -sysperms
+       Create new files with system default permissions, instead of umask 077
+       (only effective with disabled wallet functionality)
+
+  -txindex
+       Maintain a full transaction index, used by the getrawtransaction rpc
+       call (default: 0)
+
+  -version
+       Print version and exit
+
+Connection options:
+
+  -addnode=&lt;ip&gt;
+       Add a node to connect to and attempt to keep the connection open (see
+       the `addnode` RPC command help for more info). This option can be
+       specified multiple times to add multiple nodes.
+
+  -banscore=&lt;n&gt;
+       Threshold for disconnecting misbehaving peers (default: 100)
+
+  -bantime=&lt;n&gt;
+       Number of seconds to keep misbehaving peers from reconnecting (default:
+       86400)
+
+  -bind=&lt;addr&gt;
+       Bind to given address and always listen on it. Use [host]:port notation
+       for IPv6
+
+  -connect=&lt;ip&gt;
+       Connect only to the specified node; -noconnect disables automatic
+       connections (the rules for this peer are the same as for
+       -addnode). This option can be specified multiple times to connect
+       to multiple nodes.
+
+  -discover
+       Discover own IP addresses (default: 1 when listening and no -externalip
+       or -proxy)
+
+  -dns
+       Allow DNS lookups for -addnode, -seednode and -connect (default: 1)
+
+  -dnsseed
+       Query for peer addresses via DNS lookup, if low on addresses (default: 1
+       unless -connect used)
+
+  -enablebip61
+       Send reject messages per BIP61 (default: 1)
+
+  -externalip=&lt;ip&gt;
+       Specify your own public address
+
+  -forcednsseed
+       Always query for peer addresses via DNS lookup (default: 0)
+
+  -listen
+       Accept connections from outside (default: 1 if no -proxy or -connect)
+
+  -listenonion
+       Automatically create Tor hidden service (default: 1)
+
+  -maxconnections=&lt;n&gt;
+       Maintain at most &lt;n&gt; connections to peers (default: 125)
+
+  -maxreceivebuffer=&lt;n&gt;
+       Maximum per-connection receive buffer, &lt;n&gt;*1000 bytes (default: 5000)
+
+  -maxsendbuffer=&lt;n&gt;
+       Maximum per-connection send buffer, &lt;n&gt;*1000 bytes (default: 1000)
+
+  -maxtimeadjustment
+       Maximum allowed median peer time offset adjustment. Local perspective of
+       time may be influenced by peers forward or backward by this
+       amount. (default: 4200 seconds)
+
+  -maxuploadtarget=&lt;n&gt;
+       Tries to keep outbound traffic under the given target (in MiB per 24h),
+       0 = no limit (default: 0)
+
+  -onion=&lt;ip:port&gt;
+       Use separate SOCKS5 proxy to reach peers via Tor hidden services, set
+       -noonion to disable (default: -proxy)
+
+  -onlynet=&lt;net&gt;
+       Make outgoing connections only through network &lt;net&gt; (ipv4, ipv6 or
+       onion). Incoming connections are not affected by this option.
+       This option can be specified multiple times to allow multiple
+       networks.
+
+  -peerbloomfilters
+       Support filtering of blocks and transaction with bloom filters (default:
+       1)
+
+  -permitbaremultisig
+       Relay non-P2SH multisig (default: 1)
+
+  -port=&lt;port&gt;
+       Listen for connections on &lt;port&gt; (default: 8333 or testnet: 18333)
+
+  -proxy=&lt;ip:port&gt;
+       Connect through SOCKS5 proxy, set -noproxy to disable (default:
+       disabled)
+
+  -proxyrandomize
+       Randomize credentials for every proxy connection. This enables Tor
+       stream isolation (default: 1)
+
+  -seednode=&lt;ip&gt;
+       Connect to a node to retrieve peer addresses, and disconnect. This
+       option can be specified multiple times to connect to multiple
+       nodes.
+
+  -timeout=&lt;n&gt;
+       Specify connection timeout in milliseconds (minimum: 1, default: 5000)
+
+  -torcontrol=&lt;ip&gt;:&lt;port&gt;
+       Tor control port to use if onion listening enabled (default:
+       127.0.0.1:9051)
+
+  -torpassword=&lt;pass&gt;
+       Tor control port password (default: empty)
+
+  -whitebind=&lt;addr&gt;
+       Bind to given address and whitelist peers connecting to it. Use
+       [host]:port notation for IPv6
+
+  -whitelist=&lt;IP address or network&gt;
+       Whitelist peers connecting from the given IP address (e.g. 1.2.3.4) or
+       CIDR notated network (e.g. 1.2.3.0/24). Can be specified multiple
+       times. Whitelisted peers cannot be DoS banned and their
+       transactions are always relayed, even if they are already in the
+       mempool, useful e.g. for a gateway
+
+Wallet options:
+
+  -addresstype
+       What type of addresses to use (&quot;legacy&quot;, &quot;p2sh-segwit&quot;, or &quot;bech32&quot;,
+       default: &quot;p2sh-segwit&quot;)
+
+  -avoidpartialspends
+       Group outputs by address, selecting all or none, instead of selecting on
+       a per-output basis. Privacy is improved as an address is only
+       used once (unless someone sends to it after spending from it),
+       but may result in slightly higher fees as suboptimal coin
+       selection may result due to the added limitation (default: 0)
+
+  -changetype
+       What type of change to use (&quot;legacy&quot;, &quot;p2sh-segwit&quot;, or &quot;bech32&quot;).
+       Default is same as -addresstype, except when
+       -addresstype=p2sh-segwit a native segwit output is used when
+       sending to a native segwit address)
+
+  -disablewallet
+       Do not load the wallet and disable wallet RPC calls
+
+  -discardfee=&lt;amt&gt;
+       The fee rate (in BTC/kB) that indicates your tolerance for discarding
+       change by adding it to the fee (default: 0.0001). Note: An output
+       is discarded if it is dust at this rate, but we will always
+       discard up to the dust relay fee and a discard fee above that is
+       limited by the fee estimate for the longest target
+
+  -fallbackfee=&lt;amt&gt;
+       A fee rate (in BTC/kB) that will be used when fee estimation has
+       insufficient data (default: 0.0002)
+
+  -keypool=&lt;n&gt;
+       Set key pool size to &lt;n&gt; (default: 1000)
+
+  -mintxfee=&lt;amt&gt;
+       Fees (in BTC/kB) smaller than this are considered zero fee for
+       transaction creation (default: 0.00001)
+
+  -paytxfee=&lt;amt&gt;
+       Fee (in BTC/kB) to add to transactions you send (default: 0.00)
+
+  -rescan
+       Rescan the block chain for missing wallet transactions on startup
+
+  -salvagewallet
+       Attempt to recover private keys from a corrupt wallet on startup
+
+  -spendzeroconfchange
+       Spend unconfirmed change when sending transactions (default: 1)
+
+  -txconfirmtarget=&lt;n&gt;
+       If paytxfee is not set, include enough fee so transactions begin
+       confirmation on average within n blocks (default: 6)
+
+  -upgradewallet
+       Upgrade wallet to latest format on startup
+
+  -wallet=&lt;path&gt;
+       Specify wallet database path. Can be specified multiple times to load
+       multiple wallets. Path is interpreted relative to &lt;walletdir&gt; if
+       it is not absolute, and will be created if it does not exist (as
+       a directory containing a wallet.dat file and log files). For
+       backwards compatibility this will also accept names of existing
+       data files in &lt;walletdir&gt;.)
+
+  -walletbroadcast
+       Make the wallet broadcast transactions (default: 1)
+
+  -walletdir=&lt;dir&gt;
+       Specify directory to hold wallets (default: &lt;datadir&gt;/wallets if it
+       exists, otherwise &lt;datadir&gt;)
+
+  -walletnotify=&lt;cmd&gt;
+       Execute command when a wallet transaction changes (%s in cmd is replaced
+       by TxID)
+
+  -walletrbf
+       Send transactions with full-RBF opt-in enabled (RPC only, default: 0)
+
+  -zapwallettxes=&lt;mode&gt;
+       Delete all wallet transactions and only recover those parts of the
+       blockchain through -rescan on startup (1 = keep tx meta data e.g.
+       account owner and payment request information, 2 = drop tx meta
+       data)
+
+Debugging/Testing options:
+
+  -debug=&lt;category&gt;
+       Output debugging information (default: -nodebug, supplying &lt;category&gt; is
+       optional). If &lt;category&gt; is not supplied or if &lt;category&gt; = 1,
+       output all debugging information. &lt;category&gt; can be: net, tor,
+       mempool, http, bench, zmq, db, rpc, estimatefee, addrman,
+       selectcoins, reindex, cmpctblock, rand, prune, proxy, mempoolrej,
+       libevent, coindb, qt, leveldb.
+
+  -debugexclude=&lt;category&gt;
+       Exclude debugging information for a category. Can be used in conjunction
+       with -debug=1 to output debug logs for all categories except one
+       or more specified categories.
+
+  -help-debug
+       Show all debugging options (usage: --help -help-debug)
+
+  -logips
+       Include IP addresses in debug output (default: 0)
+
+  -logtimestamps
+       Prepend debug output with timestamp (default: 1)
+
+  -maxtxfee=&lt;amt&gt;
+       Maximum total fees (in BTC) to use in a single wallet transaction or raw
+       transaction; setting this too low may abort large transactions
+       (default: 0.10)
+
+  -printtoconsole
+       Send trace/debug info to console (default: 1 when no -daemon. To disable
+       logging to file, set -nodebuglogfile)
+
+  -shrinkdebugfile
+       Shrink debug.log file on client startup (default: 1 when no -debug)
+
+  -uacomment=&lt;cmt&gt;
+       Append comment to the user agent string
+
+Chain selection options:
+
+  -testnet
+       Use the test chain
+
+Node relay options:
+
+  -bytespersigop
+       Equivalent bytes per sigop in transactions for relay and mining
+       (default: 20)
+
+  -datacarrier
+       Relay and mine data carrier transactions (default: 1)
+
+  -datacarriersize
+       Maximum size of data in data carrier transactions we relay and mine
+       (default: 83)
+
+  -mempoolreplacement
+       Enable transaction replacement in the memory pool (default: 1)
+
+  -minrelaytxfee=&lt;amt&gt;
+       Fees (in BTC/kB) smaller than this are considered zero fee for relaying,
+       mining and transaction creation (default: 0.00001)
+
+  -whitelistforcerelay
+       Force relay of transactions from whitelisted peers even if they violate
+       local relay policy (default: 1)
+
+  -whitelistrelay
+       Accept relayed transactions received from whitelisted peers even when
+       not relaying transactions (default: 1)
+
+Block creation options:
+
+  -blockmaxweight=&lt;n&gt;
+       Set maximum BIP141 block weight (default: 3996000)
+
+  -blockmintxfee=&lt;amt&gt;
+       Set lowest fee rate (in BTC/kB) for transactions to be included in block
+       creation. (default: 0.00001)
+
+RPC server options:
+
+  -rest
+       Accept public REST requests (default: 0)
+
+  -rpcallowip=&lt;ip&gt;
+       Allow JSON-RPC connections from specified source. Valid for &lt;ip&gt; are a
+       single IP (e.g. 1.2.3.4), a network/netmask (e.g.
+       1.2.3.4/255.255.255.0) or a network/CIDR (e.g. 1.2.3.4/24). This
+       option can be specified multiple times
+
+  -rpcauth=&lt;userpw&gt;
+       Username and hashed password for JSON-RPC connections. The field
+       &lt;userpw&gt; comes in the format: &lt;USERNAME&gt;:&lt;SALT&gt;$&lt;HASH&gt;. A
+       canonical python script is included in share/rpcauth. The client
+       then connects normally using the
+       rpcuser=&lt;USERNAME&gt;/rpcpassword=&lt;PASSWORD&gt; pair of arguments. This
+       option can be specified multiple times
+
+  -rpcbind=&lt;addr&gt;[:port]
+       Bind to given address to listen for JSON-RPC connections. This option is
+       ignored unless -rpcallowip is also passed. Port is optional and
+       overrides -rpcport. Use [host]:port notation for IPv6. This
+       option can be specified multiple times (default: 127.0.0.1 and
+       ::1 i.e., localhost, or if -rpcallowip has been specified,
+       0.0.0.0 and :: i.e., all addresses)
+
+  -rpccookiefile=&lt;loc&gt;
+       Location of the auth cookie. Relative paths will be prefixed by a
+       net-specific datadir location. (default: data dir)
+
+  -rpcpassword=&lt;pw&gt;
+       Password for JSON-RPC connections
+
+  -rpcport=&lt;port&gt;
+       Listen for JSON-RPC connections on &lt;port&gt; (default: 8332 or testnet:
+       18332)
+
+  -rpcserialversion
+       Sets the serialization of raw transaction or block hex returned in
+       non-verbose mode, non-segwit(0) or segwit(1) (default: 1)
+
+  -rpcthreads=&lt;n&gt;
+       Set the number of threads to service RPC calls (default: 4)
+
+  -rpcuser=&lt;user&gt;
+       Username for JSON-RPC connections
+
+  -server
+       Accept command line and JSON-RPC commands</code></pre><p id="291cbe15-5586-4875-b6b0-039b60e04a24" class="">
+</p></div></article></body></html>

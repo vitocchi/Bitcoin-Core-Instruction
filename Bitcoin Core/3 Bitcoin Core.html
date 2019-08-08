@@ -1,0 +1,583 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>3.Bitcoin Coreの紹介</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="27218719-20c2-4b20-bd49-5028d6c01a18" class="page sans"><header><h1 class="page-title">3.Bitcoin Coreの紹介</h1><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th>tag</th><td><span class="selected-value">slide</span></td></tr><tr class="property-row property-row-relation"><th>トップページ</th><td><a href="Untitled.html">目次</a></td></tr></tbody></table></header><div class="page-body"><h1 id="1ed5c542-d569-4b5c-bde5-28d64c1a4ad3" class="">概要</h1><ul id="74a225cb-c757-4a76-ac89-f04d0f589feb" class="bulleted-list"><li>bitcoinネットワークにフルノードとして参加するためのソフトウェア。<ul id="91147444-87eb-44e3-b482-8b842e4395ec" class="bulleted-list"><li>bitcoinを利用したアプリケーション（ECサイト）などを作成する際に必要。</li></ul><ul id="d2436c04-97c7-419b-972c-4a6ec671d691" class="bulleted-list"><li>bitcoinネットワークでの簡単な送金、チェーンの様子の観察であればGUI版のQtも利用できる。 </li></ul><ul id="95d49a88-fe74-4346-acb3-9d23b27ffb98" class="bulleted-list"><li>機能<ul id="0d87a71f-c864-4aac-96be-ea5fb2aad1c2" class="bulleted-list"><li>トランザクションの作成、送信、受信</li></ul><ul id="ace62a85-5efa-423b-a5be-454b5335455e" class="bulleted-list"><li>鍵保存</li></ul><ul id="3f963b82-0f37-4b55-a381-ca1f387b0ba6" class="bulleted-list"><li>マイニング</li></ul><ul id="7f6cc75f-6157-4c7a-8fe3-74edc448d0bb" class="bulleted-list"><li>その他のノードとのP2P通信</li></ul></li></ul></li></ul><p id="8653edbb-a3c9-42dc-a5c5-6e79fe65a25d" class="">
+</p><p id="801d6893-01d0-409a-904e-af6d8317c1ad" class="">世界で実際に走っているノードの殆どはBitcoin Core(10,000くらい)</p><p id="d9d1dc46-f659-4f15-a03c-40163b579b8e" class="">
+</p><figure id="3652455c-f739-481d-b217-9200c2ba1fdb" class="image"><a href="3 Bitcoin Core/Untitled"><img style="width:3308px" src="3 Bitcoin Core/Untitled"/></a></figure><figure id="d41ef78d-0745-4187-9dd3-ddb416b10ed2"><div class="bookmark source"><a href="https://coin.dance/nodes/share">Coin Dance</a><br/><a class="bookmark-href" href="https://coin.dance/nodes/share">https://coin.dance/nodes/share</a></div></figure><ul id="f3629d39-07ce-467b-919b-9b8cabbe2c63" class="bulleted-list"><li></li></ul><ul id="44348ad9-7ad9-4f34-9186-75c1aa4f4c77" class="bulleted-list"><li></li></ul><p id="730177b8-a437-4386-9bd2-eb01b861b1e8" class="">
+</p><ul id="f642b3e1-7866-42fc-b6af-bf0d9c9f3384" class="bulleted-list"><li>bitcoin開発の中心点であり、bitcoinのプロトコルはbitcoin coreの仕様によって定義されている。<ul id="4042f596-da30-4522-b5d0-b3f8182a59d1" class="bulleted-list"><li>新しいプロトコルを採用する → Bitcoin Coreのリポジトリのmasterブランチにそのプロトコルを実装した変更をマージする</li></ul></li></ul><p id="8ff64c40-4963-4fe0-90e7-8a845930354c" class="">
+</p><ul id="a9a6188d-ef45-4da8-8d11-23b903b0856d" class="bulleted-list"><li>Satoshiによって作られたbitcoinのクライアントは、実はホワイトペーパー以前に完成していた。</li></ul><p id="24f86421-0d38-46e8-8667-25979a8d45a1" class="">
+</p><ul id="15357b00-6dcb-4ec5-be35-e5c2fb508162" class="bulleted-list"><li>MITライセンスで開発されている（オープンソース）</li></ul><p id="4ac73ddf-1640-4362-bb26-68228649e5b0" class="">
+</p><ul id="28ed16fd-ec1e-4feb-834f-0f733734bcd4" class="bulleted-list"><li>当初はSatoshiNakamotoのみで開発されていたが今では600以上のContributerがいる</li></ul><p id="e0522871-a2ed-42f5-9247-ed7245419cec" class="">
+</p><ul id="554136ae-99d8-490c-b55c-404b5ad97570" class="bulleted-list"><li>そのうち10人程度はFulltime、さらに数十人はパートタイムで開発している</li></ul><p id="cf0cd3d6-7296-42b0-814b-bf69af57e0b9" class="">
+</p><ul id="469254e8-0e70-4032-ab7b-25233d2652ae" class="bulleted-list"><li>ソフトウェアは今日までに大きく改善され、それが今、Bitcoin Coreとして知られている</li></ul><p id="df852309-54b4-4e69-94ee-e2e8fe9de8a6" class="">
+</p><h1 id="24251c5d-0eb0-4939-a921-592970ed729e" class="">実装</h1><ul id="9cd4f612-1d7d-4d36-a6d5-0fec880b8d55" class="bulleted-list"><li>Bitcoin Coreはbitcoinシステムのリファレンス実装（bitcoinシステムのソフトウェアを作成する際、各機能をどのように実装すればよいか参考にするべき実装）で、bitcoinを扱う際に必要なすべての機能が実装されている。</li></ul><p id="39fda210-cadd-4852-8c16-9e25ba2b3612" class="">
+</p><ul id="64b0d2d6-a3a0-416d-bd2e-94b1688c830a" class="bulleted-list"><li>しかし、Bitcoin CoreはDeveloper向けのリファレンス実装ではあるが、実際の商用利用などに利用することは推奨されない。実際には、BIP39,32（HDウォレットやニーモニックコード）に即したノード、ウォレットを利用することが望ましい。とMastering Bitcoinには書かれている。</li></ul><p id="e0bf5190-539f-4ec5-8e80-e7fafd8c047b" class="">
+</p><ul id="44174aff-db36-4f9f-8505-55607d4009d5" class="bulleted-list"><li>言語はC++。</li></ul><p id="36ab7a84-f766-489d-a546-e36a114504a6" class="">
+</p><ul id="3201512e-af80-43be-a465-c60069c9513b" class="bulleted-list"><li>ソースは全てGithubに公開されている</li></ul><figure id="bdef830d-9115-46c5-b5a2-2be914b85865"><div class="bookmark source"><a href="https://github.com/bitcoin/bitcoin">bitcoin/bitcoin</a><br/><a class="bookmark-href" href="https://github.com/bitcoin/bitcoin">https://github.com/bitcoin/bitcoin</a></div></figure><p id="25dc4b34-b886-4849-85b2-26d1f6caf873" class="">
+</p><ul id="3334c39c-7d32-4c3a-8cfd-49635a2994d7" class="bulleted-list"><li>commit数の推移を見ると、今なお全力開発中であることがわかる。</li></ul><figure id="162b3dc0-1632-4d1d-a942-3359cf722bee" class="image"><a href="3 Bitcoin Core/Untitled 1"><img style="width:1160px" src="3 Bitcoin Core/Untitled 1"/></a></figure><p id="d17405f6-f21d-4df3-9797-11243807340f" class="">
+</p><ul id="295d8ece-4250-47ea-8035-c865542ccb44" class="bulleted-list"><li>コア開発者にはブロックストリームのco-founderなどもいる</li></ul><p id="173fc16a-a799-4343-80b8-9691618dd6b6" class="">
+</p><p id="4cde32d6-3e07-4b08-a7ea-76d1b4a90806" class="">
+</p><h2 id="9681cec4-89c8-4716-9d63-c85b8238f98e" class="">インストール方法</h2><p id="2dee98ed-5c7d-4c94-b8cc-151a5cec1ec2" class="">
+</p><ul id="07d0121c-fc81-4dc9-9de8-eabad465d3ed" class="bulleted-list"><li>HPからダウンロードする<figure id="7125f429-1dff-49ea-a8aa-b8d60360fafd"><div class="bookmark source"><a href="https://bitcoin.org/ja/wallets/desktop/windows/bitcoincore/">Bitcoin Core - デスクトップ - Windows - ウォレットを選ぶ - ビットコイン</a><br/><a class="bookmark-href" href="https://bitcoin.org/ja/wallets/desktop/windows/bitcoincore/">https://bitcoin.org/ja/wallets/desktop/windows/bitcoincore/</a></div></figure></li></ul><p id="5ee9a2ee-4861-4a6e-a46e-eacf7b9a4eb5" class="">
+</p><ul id="6f69f7e9-f508-45cf-a5c9-e9dd7a7b26b9" class="bulleted-list"><li>ソースコードをコンパイルして実行する<ul id="69897c02-1281-4e95-88d6-2c6acb0ddc03" class="bulleted-list"><li>今回はこの手順を解説します。</li></ul></li></ul></div></article></body></html>

@@ -1,0 +1,821 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>bitcion-cli commands</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="64be223e-d38b-4255-ac4d-97f711e9d648" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📎</span></div><h1 class="page-title">bitcion-cli commands</h1><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th>tag</th><td><span class="selected-value">docs</span></td></tr><tr class="property-row property-row-relation"><th>トップページ</th><td><a href="Untitled.html">目次</a></td></tr></tbody></table></header><div class="page-body"><h2 id="2b897302-5cb5-47d6-ae37-a609bb772c12" class="">主なコマンド</h2><ul id="3435ca47-e8f0-4da6-8c70-b0efd02a2bd2" class="bulleted-list"><li><code>help &lt;commands&gt;</code><ul id="9878a526-6fd0-45d4-b464-f3277cb4d175" class="bulleted-list"><li>各種コマンドの詳細を見ることが出来る。</li></ul></li></ul><ul id="394ed419-1842-4fa0-994d-6800457c40e7" class="bulleted-list"><li><code>getblockchianinfo</code><ul id="e1cfefe1-92ca-44a8-852d-94c8a27c4b3f" class="bulleted-list"><li>ブロックチェーンに関する情報をみる</li></ul><ul id="27b2cadf-9b20-4808-98c9-36c8135a0fd9" class="toggle"><li><details open=""><summary> 実行例</summary><pre id="e4d634c3-32f1-4d52-aa23-c83b99dbfc4c" class="code"><code>$ bitcoin-cli getblockchaininfo
+
+{
+  &quot;chain&quot;: &quot;regtest&quot;,
+  &quot;blocks&quot;: 102,
+  &quot;headers&quot;: 102,
+  &quot;bestblockhash&quot;: &quot;11202f9871c1c2f28445b721e4a4d2ee523cfd2be5a94b33626b3cf14094ce3b&quot;,
+  &quot;difficulty&quot;: 4.656542373906925e-10,
+  &quot;mediantime&quot;: 1550981230,
+  &quot;verificationprogress&quot;: 1,
+  &quot;initialblockdownload&quot;: false,
+  &quot;chainwork&quot;: &quot;00000000000000000000000000000000000000000000000000000000000000ce&quot;,
+  &quot;size_on_disk&quot;: 32325,
+  &quot;pruned&quot;: false,
+  &quot;softforks&quot;: [
+    {
+      &quot;id&quot;: &quot;bip34&quot;,
+      &quot;version&quot;: 2,
+      &quot;reject&quot;: {
+        &quot;status&quot;: false
+      }
+    },
+    {
+      &quot;id&quot;: &quot;bip66&quot;,
+      &quot;version&quot;: 3,
+      &quot;reject&quot;: {
+        &quot;status&quot;: false
+      }
+    },
+    {
+      &quot;id&quot;: &quot;bip65&quot;,
+      &quot;version&quot;: 4,
+      &quot;reject&quot;: {
+        &quot;status&quot;: false
+      }
+    }
+  ],
+  &quot;bip9_softforks&quot;: {
+    &quot;csv&quot;: {
+      &quot;status&quot;: &quot;defined&quot;,
+      &quot;startTime&quot;: 0,
+      &quot;timeout&quot;: 9223372036854775807,
+      &quot;since&quot;: 0
+    },
+    &quot;segwit&quot;: {
+      &quot;status&quot;: &quot;active&quot;,
+      &quot;startTime&quot;: -1,
+      &quot;timeout&quot;: 9223372036854775807,
+      &quot;since&quot;: 0
+    }
+  },
+  &quot;warnings&quot;: &quot;&quot;
+}</code></pre></details></li></ul></li></ul><ul id="22b6ccf9-c370-4618-a31a-7782fb0a5f30" class="bulleted-list"><li><code>generate nblocks</code><ul id="62827e5c-b781-41e4-b807-c7b1397fce7b" class="bulleted-list"><li>regtestネットワーク限定コマンドで、 <code>n</code> 個のブロックを生成する</li></ul></li></ul><ul id="9d92c6d0-1e6d-49a0-9888-6f1988aa929e" class="bulleted-list"><li><code>getwalletinfo</code><ul id="d072a827-1b51-4f3e-b712-80802200cce5" class="bulleted-list"><li>ウォレットに関する情報を見る</li></ul><ul id="b5ab89f3-57de-4756-bd87-bf1d0330c543" class="toggle"><li><details open=""><summary>実行例</summary><pre id="cb6fa1ab-f519-4a7e-8448-def3f8c97cbf" class="code"><code>$ bitcoin-cli getwalletinfo
+
+{
+  &quot;walletname&quot;: &quot;&quot;,
+  &quot;walletversion&quot;: 169900,
+  &quot;balance&quot;: 99.99996260,
+  &quot;unconfirmed_balance&quot;: 0.00000000,
+  &quot;immature_balance&quot;: 5000.00003740,
+  &quot;txcount&quot;: 103,
+  &quot;keypoololdest&quot;: 1550981150,
+  &quot;keypoolsize&quot;: 999,
+  &quot;keypoolsize_hd_internal&quot;: 1000,
+  &quot;paytxfee&quot;: 0.00000000,
+  &quot;hdseedid&quot;: &quot;389cb6e725210dce4b90ad6f075b637bbb4e15cb&quot;,
+  &quot;hdmasterkeyid&quot;: &quot;389cb6e725210dce4b90ad6f075b637bbb4e15cb&quot;,
+  &quot;private_keys_enabled&quot;: true
+}</code></pre></details></li></ul></li></ul><ul id="7c8b1244-af49-41a0-91f4-76595270bce4" class="bulleted-list"><li><code>getbestblockhash</code><ul id="8c2d003c-8680-47a9-b749-fb60605e5cc4" class="bulleted-list"><li>最も長いチェーンの最新のブロックハッシュを取得する</li></ul><ul id="e65b6a48-7e34-4535-b30b-cd7880001db2" class="toggle"><li><details open=""><summary>実行例</summary></details></li></ul><pre id="577f23af-17e8-48d3-8897-c2df86ab9232" class="code"><code>$ bc getbestblockhash
+11202f9871c1c2f28445b721e4a4d2ee523cfd2be5a94b33626b3cf14094ce3b</code></pre></li></ul><ul id="42237317-453f-4ba3-b77e-5416c9a1b73c" class="bulleted-list"><li><code>getblock</code><ul id="0cfb1d25-1ba2-422c-bce8-58906946f27d" class="bulleted-list"><li>ブロックハッシュを入力して、そのブロックを取得する</li></ul><ul id="643eb9d1-a7e6-4b48-a656-d86e00566491" class="toggle"><li><details open=""><summary>実行例</summary><pre id="73f54e30-adc0-4bff-a52d-58e2372cb9a7" class="code"><code>bc getblock 11202f9871c1c2f28445b721e4a4d2ee523cfd2be5a94b33626b3cf14094ce3b
+{
+  &quot;hash&quot;: &quot;11202f9871c1c2f28445b721e4a4d2ee523cfd2be5a94b33626b3cf14094ce3b&quot;,
+  &quot;confirmations&quot;: 1,
+  &quot;strippedsize&quot;: 414,
+  &quot;size&quot;: 450,
+  &quot;weight&quot;: 1692,
+  &quot;height&quot;: 102,
+  &quot;version&quot;: 536870912,
+  &quot;versionHex&quot;: &quot;20000000&quot;,
+  &quot;merkleroot&quot;: &quot;b8fd170a5b6e2aac203fb824d6650a9cf832f0efc5c2dfa0a493256c08b360d7&quot;,
+  &quot;tx&quot;: [
+    &quot;de6288da90545a4f3263b3bccadae4a5841ff1171f05e7bc6f611ce48ee7d782&quot;,
+    &quot;c2501059ceb99da51f93ce596f86dde2f22cd0700c2c4eb7f619d24f3c182fa9&quot;
+  ],
+  &quot;time&quot;: 1550984102,
+  &quot;mediantime&quot;: 1550981230,
+  &quot;nonce&quot;: 5,
+  &quot;bits&quot;: &quot;207fffff&quot;,
+  &quot;difficulty&quot;: 4.656542373906925e-10,
+  &quot;chainwork&quot;: &quot;00000000000000000000000000000000000000000000000000000000000000ce&quot;,
+  &quot;nTx&quot;: 2,
+  &quot;previousblockhash&quot;: &quot;7887da582567755501bb2290f067a42808adbd0af87c5954b94b809c6a4a940c&quot;
+}</code></pre></details></li></ul></li></ul><ul id="af65af15-7a12-4f1c-9f6c-e0befc2eb295" class="bulleted-list"><li><code>gettransaction</code><ul id="79e40318-8be3-45da-9f02-45861b45452a" class="bulleted-list"><li>txidを入力して、transactionの中身を取得する</li></ul><ul id="589c6d7c-fec4-4a9e-bcea-2ba1c92f6d58" class="toggle"><li><details open=""><summary>実行例</summary><pre id="a33492a6-992c-48a4-9662-150e74e52007" class="code"><code>$ bc gettransaction de6288da90545a4f3263b3bccadae4a5841ff1171f05e7bc6f611ce48ee7d782
+{
+  &quot;amount&quot;: 0.00000000,
+  &quot;confirmations&quot;: 1,
+  &quot;generated&quot;: true,
+  &quot;blockhash&quot;: &quot;11202f9871c1c2f28445b721e4a4d2ee523cfd2be5a94b33626b3cf14094ce3b&quot;,
+  &quot;blockindex&quot;: 0,
+  &quot;blocktime&quot;: 1550984102,
+  &quot;txid&quot;: &quot;de6288da90545a4f3263b3bccadae4a5841ff1171f05e7bc6f611ce48ee7d782&quot;,
+  &quot;walletconflicts&quot;: [
+  ],
+  &quot;time&quot;: 1550984102,
+  &quot;timereceived&quot;: 1550984102,
+  &quot;bip125-replaceable&quot;: &quot;no&quot;,
+  &quot;details&quot;: [
+    {
+      &quot;address&quot;: &quot;n4Me8VTaApZJMbeVuEM6PcsU67swc4RYu4&quot;,
+      &quot;category&quot;: &quot;immature&quot;,
+      &quot;amount&quot;: 50.00003740,
+      &quot;vout&quot;: 0
+    }
+  ],
+  &quot;hex&quot;: &quot;020000000001010000000000000000000000000000000000000000000000000000000000000000ffffffff0401660101ffffffff029c00062a0100000023210324a2b452db9ff1006b7aeca8264abf1ecf7a3140a7b75d42d762e2960fabc38bac0000000000000000266a24aa21a9ed7fbef1c44674c89beda7c65655b872f3998b686730d79d43b6a266647417aef40120000000000000000000000000000000000000000000000000000000000000000000000000&quot;
+}</code></pre></details></li></ul></li></ul><h2 id="004c8f75-f5a5-454f-b5ed-bcda806ee37a" class="">全コマンド</h2><pre id="ad1cdfd0-ac03-4fa6-9475-e11f6f6c6d1d" class="code"><code>== Blockchain ==
+getbestblockhash
+getblock &quot;blockhash&quot; ( verbosity )
+getblockchaininfo
+getblockcount
+getblockhash height
+getblockheader &quot;hash&quot; ( verbose )
+getblockstats hash_or_height ( stats )
+getchaintips
+getchaintxstats ( nblocks blockhash )
+getdifficulty
+getmempoolancestors txid (verbose)
+getmempooldescendants txid (verbose)
+getmempoolentry txid
+getmempoolinfo
+getrawmempool ( verbose )
+gettxout &quot;txid&quot; n ( include_mempool )
+gettxoutproof [&quot;txid&quot;,...] ( blockhash )
+gettxoutsetinfo
+preciousblock &quot;blockhash&quot;
+pruneblockchain
+savemempool
+scantxoutset &lt;action&gt; ( &lt;scanobjects&gt; )
+verifychain ( checklevel nblocks )
+verifytxoutproof &quot;proof&quot;
+
+== Control ==
+getmemoryinfo (&quot;mode&quot;)
+help ( &quot;command&quot; )
+logging ( &lt;include&gt; &lt;exclude&gt; )
+stop
+uptime
+
+== Generating ==
+generate nblocks ( maxtries )
+generatetoaddress nblocks address (maxtries)
+
+== Mining ==
+getblocktemplate ( TemplateRequest )
+getmininginfo
+getnetworkhashps ( nblocks height )
+prioritisetransaction &lt;txid&gt; &lt;dummy value&gt; &lt;fee delta&gt;
+submitblock &quot;hexdata&quot;  ( &quot;dummy&quot; )
+
+== Network ==
+addnode &quot;node&quot; &quot;add|remove|onetry&quot;
+clearbanned
+disconnectnode &quot;[address]&quot; [nodeid]
+getaddednodeinfo ( &quot;node&quot; )
+getconnectioncount
+getnettotals
+getnetworkinfo
+getpeerinfo
+listbanned
+ping
+setban &quot;subnet&quot; &quot;add|remove&quot; (bantime) (absolute)
+setnetworkactive true|false
+
+== Rawtransactions ==
+combinepsbt [&quot;psbt&quot;,...]
+combinerawtransaction [&quot;hexstring&quot;,...]
+converttopsbt &quot;hexstring&quot; ( permitsigdata iswitness )
+createpsbt [{&quot;txid&quot;:&quot;id&quot;,&quot;vout&quot;:n},...] [{&quot;address&quot;:amount},{&quot;data&quot;:&quot;hex&quot;},...] ( locktime ) ( replaceable )
+createrawtransaction [{&quot;txid&quot;:&quot;id&quot;,&quot;vout&quot;:n},...] [{&quot;address&quot;:amount},{&quot;data&quot;:&quot;hex&quot;},...] ( locktime ) ( replaceable )
+decodepsbt &quot;psbt&quot;
+decoderawtransaction &quot;hexstring&quot; ( iswitness )
+decodescript &quot;hexstring&quot;
+finalizepsbt &quot;psbt&quot; ( extract )
+fundrawtransaction &quot;hexstring&quot; ( options iswitness )
+getrawtransaction &quot;txid&quot; ( verbose &quot;blockhash&quot; )
+sendrawtransaction &quot;hexstring&quot; ( allowhighfees )
+signrawtransaction &quot;hexstring&quot; ( [{&quot;txid&quot;:&quot;id&quot;,&quot;vout&quot;:n,&quot;scriptPubKey&quot;:&quot;hex&quot;,&quot;redeemScript&quot;:&quot;hex&quot;},...] [&quot;privatekey1&quot;,...] sighashtype )
+signrawtransactionwithkey &quot;hexstring&quot; [&quot;privatekey1&quot;,...] ( [{&quot;txid&quot;:&quot;id&quot;,&quot;vout&quot;:n,&quot;scriptPubKey&quot;:&quot;hex&quot;,&quot;redeemScript&quot;:&quot;hex&quot;},...] sighashtype )
+testmempoolaccept [&quot;rawtxs&quot;] ( allowhighfees )
+
+== Util ==
+createmultisig nrequired [&quot;key&quot;,...] ( &quot;address_type&quot; )
+estimatesmartfee conf_target (&quot;estimate_mode&quot;)
+signmessagewithprivkey &quot;privkey&quot; &quot;message&quot;
+validateaddress &quot;address&quot;
+verifymessage &quot;address&quot; &quot;signature&quot; &quot;message&quot;
+
+== Wallet ==
+abandontransaction &quot;txid&quot;
+abortrescan
+addmultisigaddress nrequired [&quot;key&quot;,...] ( &quot;label&quot; &quot;address_type&quot; )
+backupwallet &quot;destination&quot;
+bumpfee &quot;txid&quot; ( options )
+createwallet &quot;wallet_name&quot; ( disable_private_keys )
+dumpprivkey &quot;address&quot;
+dumpwallet &quot;filename&quot;
+encryptwallet &quot;passphrase&quot;
+getaccount (Deprecated, will be removed in V0.18. To use this command, start bitcoind with -deprecatedrpc=accounts)
+getaccountaddress (Deprecated, will be removed in V0.18. To use this command, start bitcoind with -deprecatedrpc=accounts)
+getaddressbyaccount (Deprecated, will be removed in V0.18. To use this command, start bitcoind with -deprecatedrpc=accounts)
+getaddressesbylabel &quot;label&quot;
+getaddressinfo &quot;address&quot;
+getbalance ( &quot;(dummy)&quot; minconf include_watchonly )
+getnewaddress ( &quot;label&quot; &quot;address_type&quot; )
+getrawchangeaddress ( &quot;address_type&quot; )
+getreceivedbyaccount (Deprecated, will be removed in V0.18. To use this command, start bitcoind with -deprecatedrpc=accounts)
+getreceivedbyaddress &quot;address&quot; ( minconf )
+gettransaction &quot;txid&quot; ( include_watchonly )
+getunconfirmedbalance
+getwalletinfo
+importaddress &quot;address&quot; ( &quot;label&quot; rescan p2sh )
+importmulti &quot;requests&quot; ( &quot;options&quot; )
+importprivkey &quot;privkey&quot; ( &quot;label&quot; ) ( rescan )
+importprunedfunds
+importpubkey &quot;pubkey&quot; ( &quot;label&quot; rescan )
+importwallet &quot;filename&quot;
+keypoolrefill ( newsize )
+listaccounts (Deprecated, will be removed in V0.18. To use this command, start bitcoind with -deprecatedrpc=accounts)
+listaddressgroupings
+listlabels ( &quot;purpose&quot; )
+listlockunspent
+listreceivedbyaccount (Deprecated, will be removed in V0.18. To use this command, start bitcoind with -deprecatedrpc=accounts)
+listreceivedbyaddress ( minconf include_empty include_watchonly address_filter )
+listsinceblock ( &quot;blockhash&quot; target_confirmations include_watchonly include_removed )
+listtransactions (label count skip include_watchonly)
+listunspent ( minconf maxconf  [&quot;addresses&quot;,...] [include_unsafe] [query_options])
+listwallets
+loadwallet &quot;filename&quot;
+lockunspent unlock ([{&quot;txid&quot;:&quot;txid&quot;,&quot;vout&quot;:n},...])
+move (Deprecated, will be removed in V0.18. To use this command, start bitcoind with -deprecatedrpc=accounts)
+removeprunedfunds &quot;txid&quot;
+rescanblockchain (&quot;start_height&quot;) (&quot;stop_height&quot;)
+sendfrom (Deprecated, will be removed in V0.18. To use this command, start bitcoind with -deprecatedrpc=accounts)
+sendmany &quot;&quot; {&quot;address&quot;:amount,...} ( minconf &quot;comment&quot; [&quot;address&quot;,...] replaceable conf_target &quot;estimate_mode&quot;)
+sendtoaddress &quot;address&quot; amount ( &quot;comment&quot; &quot;comment_to&quot; subtractfeefromamount replaceable conf_target &quot;estimate_mode&quot;)
+setaccount (Deprecated, will be removed in V0.18. To use this command, start bitcoind with -deprecatedrpc=accounts)
+sethdseed ( &quot;newkeypool&quot; &quot;seed&quot; )
+settxfee amount
+signmessage &quot;address&quot; &quot;message&quot;
+signrawtransactionwithwallet &quot;hexstring&quot; ( [{&quot;txid&quot;:&quot;id&quot;,&quot;vout&quot;:n,&quot;scriptPubKey&quot;:&quot;hex&quot;,&quot;redeemScript&quot;:&quot;hex&quot;},...] sighashtype )
+unloadwallet ( &quot;wallet_name&quot; )
+walletcreatefundedpsbt [{&quot;txid&quot;:&quot;id&quot;,&quot;vout&quot;:n},...] [{&quot;address&quot;:amount},{&quot;data&quot;:&quot;hex&quot;},...] ( locktime ) ( replaceable ) ( options bip32derivs )
+walletlock
+walletpassphrase &quot;passphrase&quot; timeout
+walletpassphrasechange &quot;oldpassphrase&quot; &quot;newpassphrase&quot;
+walletprocesspsbt &quot;psbt&quot; ( sign &quot;sighashtype&quot; bip32derivs )</code></pre><p id="5adcf067-ab54-4b05-8679-f984c20b27c9" class="">
+</p></div></article></body></html>
